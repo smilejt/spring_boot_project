@@ -1,4 +1,4 @@
-package com.jt.abandon.certification;
+package com.jt.abandon.security;
 
 import com.alibaba.fastjson.JSON;
 import com.jt.abandon.entity.user.ResourcesEntity;

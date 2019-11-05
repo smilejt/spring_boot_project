@@ -1,7 +1,9 @@
 package com.jt.abandon.entity.user;
 
 import io.swagger.annotations.ApiModel;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @ApiModel("系统用户实体")
 public class SystemUserEntity {
 
+    private static final long serialVersionUID = -6956272262825452527L;
     private String userId;
 
     private String loginName;
@@ -65,6 +68,14 @@ public class SystemUserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(Integer userStatus) {
+        this.userStatus = userStatus;
     }
 
     public Date getLastLoginTime() {

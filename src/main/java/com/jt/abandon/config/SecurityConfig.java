@@ -1,8 +1,8 @@
 package com.jt.abandon.config;
 
-import com.jt.abandon.certification.MyUserDetailsServiceImpl;
-import com.jt.abandon.handler.MyAuthenticationFailHandler;
-import com.jt.abandon.handler.MyAuthenticationSuccessHandler;
+import com.jt.abandon.security.MyUserDetailsServiceImpl;
+import com.jt.abandon.security.MyAuthenticationFailHandler;
+import com.jt.abandon.security.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,11 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().loginProcessingUrl("/login")
-                //　自定义的登录验证成功或失败后的去向
-                .successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailHandler)
+        http.authorizeRequests()
+                //指定'/test/getTest'跳过验证
+                .antMatchers("/test/getTest").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginProcessingUrl("/login")
+                //登录验证成功
+                .successHandler(myAuthenticationSuccessHandler)
+                //登录验证失败
+                .failureHandler(myAuthenticationFailHandler)
                 // 禁用csrf防御机制(跨域请求伪造)，这么做在测试和开发会比较方便。
 //                .and().logout().permitAll()
+//        .permitAll().and().exceptionHandling().authenticationEntryPoint(myLoginUrlAuthenticationEntryPoint)
                 .and().csrf().disable();
     }
 

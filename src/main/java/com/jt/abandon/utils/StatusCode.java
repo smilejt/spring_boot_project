@@ -12,6 +12,7 @@ public class StatusCode {
      */
     public static final int OK = 20000;
     public static final String OK_TEXT = "成功";
+    public static final String LOGIN_OK_TEXT = "登录成功";
 
     /**
      * 失败
