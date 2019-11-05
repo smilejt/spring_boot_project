@@ -1,6 +1,8 @@
 package com.jt.abandon.config;
 
 import com.jt.abandon.certification.MyUserDetailsServiceImpl;
+import com.jt.abandon.handler.MyAuthenticationFailHandler;
+import com.jt.abandon.handler.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,19 +29,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     MyUserDetailsServiceImpl myUserDetailsService;
 
+    @Resource
+    private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    @Resource
+    private MyAuthenticationFailHandler myAuthenticationFailHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //  允许所有用户访问"/"和"/index.html"
-        http.authorizeRequests().antMatchers("/", "/index.html", "/swagger-ui*").permitAll()
-                // 其他地址的访问均需验证权限
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                //  登录页
-                .failureUrl("/login-error.html").permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/index.html");
+        http.formLogin().loginProcessingUrl("/login")
+                //　自定义的登录验证成功或失败后的去向
+                .successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailHandler)
+                // 禁用csrf防御机制(跨域请求伪造)，这么做在测试和开发会比较方便。
+//                .and().logout().permitAll()
+                .and().csrf().disable();
     }
 
     @Override
