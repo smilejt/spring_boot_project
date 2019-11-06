@@ -24,7 +24,9 @@ public class StatusCode {
      * 用户名或密码错误
      */
     public static final int LOGIN_ERROR = 20402;
-    public static final String LOGIN_ERROR_TEXT = "用户名或密码错误";
+    public static final String LOGIN_ERROR_TEXT = "登录失败";
+    public static final String USERNAME_OR_PASSWORD_ERROR_TEXT = "用户名或密码错误";
+    public static final String USER_DISABLED_ERROR_TEXT = "用户被禁用";
 
     /**
      * 权限不足

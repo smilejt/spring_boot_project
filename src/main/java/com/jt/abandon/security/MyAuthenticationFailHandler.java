@@ -5,7 +5,10 @@ import com.jt.abandon.utils.ResultEntity;
 import com.jt.abandon.utils.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -33,8 +36,14 @@ public class MyAuthenticationFailHandler implements AuthenticationFailureHandler
         ResultEntity<String> authenticationResultEntity = new ResultEntity<>();
         authenticationResultEntity.setFlag(false);
         authenticationResultEntity.setCode(StatusCode.LOGIN_ERROR);
-        authenticationResultEntity.setMessage(StatusCode.LOGIN_ERROR_TEXT);
         authenticationResultEntity.setData(e.getMessage());
+        if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException){
+            authenticationResultEntity.setMessage(StatusCode.USERNAME_OR_PASSWORD_ERROR_TEXT);
+        }else if (e instanceof DisabledException){
+            authenticationResultEntity.setMessage(StatusCode.USER_DISABLED_ERROR_TEXT);
+        }else {
+            authenticationResultEntity.setMessage(StatusCode.LOGIN_ERROR_TEXT);
+        }
         httpServletResponse.setContentType(CONTENT_TYPE);
         PrintWriter out = httpServletResponse.getWriter();
         out.write(JSON.toJSONString(authenticationResultEntity));
