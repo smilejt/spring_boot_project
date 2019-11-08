@@ -11,7 +11,7 @@
     <groupId>com.jt.abandon</groupId>
     <artifactId>spring_boot_project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>spring_boot_project</name>
     <description>Demo project for Spring Boot</description>
 
