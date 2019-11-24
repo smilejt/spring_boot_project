@@ -2,12 +2,15 @@ package com.jt.abandon;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.jt.abandon.config.DataBaseProperties;
+import com.jt.abandon.config.RedisBaseProperties;
 import com.jt.abandon.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -24,6 +27,9 @@ public class SpringBootProjectApplication {
 
     @Resource
     DataBaseProperties dataBaseProperties;
+
+    @Resource
+    RedisBaseProperties redisBaseProperties;
 
     @Bean
     public DataSource dateSource() {
@@ -57,6 +63,16 @@ public class SpringBootProjectApplication {
         druidDataSource.setPoolPreparedStatements(dataBaseProperties.isPoolPreparedStatements());
         druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(dataBaseProperties.getMaxPoolPreparedStatementPerConnectionSize());
         return druidDataSource;
+    }
+
+    @Bean
+    public JedisPool redisDataSource(){
+        logger.info("---------------- RedisDataSource创建注入,时间{} ----------------", DateUtil.str(new Date(), DateUtil.FMT_Y_M_D_H_M_S));
+        logger.debug("Redis数据库URL:{}",redisBaseProperties.getRedisUrl());
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxIdle(redisBaseProperties.getMaxIdle());
+        jedisPoolConfig.setMaxWaitMillis(redisBaseProperties.getMaxWait());
+        return new JedisPool(jedisPoolConfig, redisBaseProperties.getRedisUrl(), redisBaseProperties.getPort(), redisBaseProperties.getTimeout(), redisBaseProperties.getPassword(),redisBaseProperties.getDatabase());
     }
 
     public static void main(String[] args) {
