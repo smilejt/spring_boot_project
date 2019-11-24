@@ -7,3 +7,5 @@
 + 阿里druid数据库连接池
 + slf4j日志输出及监控
 + Swagger API接口文档
++ Spring Security安全框架(完成部分)
++ Redis及RedisUtil添加增(改)、删、查方法
