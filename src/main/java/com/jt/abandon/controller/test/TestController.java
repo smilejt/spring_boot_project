@@ -41,7 +41,7 @@ public class TestController {
     /**
      * 测试方法
      *
-     * @return
+     * @return 查询结果
      */
     @ApiOperation("测试获取数据库链接")
     @RequestMapping(value = "getTest", method = RequestMethod.GET)
